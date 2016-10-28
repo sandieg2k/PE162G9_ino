@@ -1,7 +1,7 @@
 /**
- * Bluetooth communication using the BlueSMiRF module.
+ * code developed by KilnerJhow e sandieg2k
  * 
- * Author: Hayk Martirosyan
+ * Credits to Hayk Martirosyan for creat Bluetooth communication using the BlueSMiRF module.
  */
 
 #include <SoftwareSerial.h>
@@ -11,8 +11,8 @@
 int RX_PIN = 8;
 int TX_PIN = 9;
 
-Servo srvMotor1;
-Servo srvMotor2;
+Servo srvMotor1; //Horizontal servo
+Servo srvMotor2; //Verical servo
 int posServo;
 
 String data = "";

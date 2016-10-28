@@ -101,7 +101,7 @@ void gotMessage(String message) {
           //motorsRotation(sensorValues[0].toInt(), sensorValues[2].toInt());
           motorsRotation(sensorValues[0].toInt(), sensorValues[2].toInt());
           sensorIndex = 0;
-          break;  
+          break;  //
       }
 
     if(message.charAt(0) == '$') {

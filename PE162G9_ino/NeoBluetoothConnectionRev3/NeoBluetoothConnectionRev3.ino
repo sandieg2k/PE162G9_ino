@@ -45,14 +45,14 @@ boolean isHighRoll = true;//To verify if actual roll value is higher than the ol
 String ang = "";
 
 // Serial interface for the BlueSMiRF
-SoftwareSerial bluetooth(RX_PIN, TX_PIN);
+SoftwareSerial bluetooth(RX_PIN, TX_PIN);//Define the RX e TX pins to receive values by bluetooth connection
 
 // Send and receive buffers
 String bluetooth_rx_buffer = "";
 String bluetooth_tx_buffer = "";
 
 // Delimiter used to separate messages
-char DELIMITER = '&';
+char DELIMITER = '&';//Delimiter used to separet the strings received
 
 void setup() {
   
@@ -61,8 +61,10 @@ void setup() {
   
   // Uncomment this only once, when configuring a new BlueSMiRF
   //set_bluetooth_baudrate();
+  //Attach servo 1 to pin 3 and servo 2 to pin 4
   srvMotor1.attach(3);
   srvMotor2.attach(4);
+  //Write 90 in servo 1 and servo 2
   srvMotor1.write(90);
   srvMotor2.write(90);
   sensorIndex = 0;
@@ -194,16 +196,16 @@ float lowPass( float input[], float output[] ) {
   }*/
 
 
-
+//Used to Set the initial values of azimuth and roll
 void setInitialValue(int azimuth, int roll) {
 
   azimuthZero = azimuth.toInt();
   rollZero = roll.toInt();  
 }
 
-
+//this function defines the rotation of each servo
 void motorsRotation(int azimuth, int roll){
-
+//Set the initial values when the first message is received.
   if (startValue == true){
     
     setInitialValue(azimuth, roll);
@@ -222,36 +224,40 @@ void motorsRotation(int azimuth, int roll){
         Serial.print("rZ: ");
         Serial.println(rollZero);
         //delay(10);
-
+        //fix the value if the received data is negative
         if(azimuthZero > 90 && isHighAzimuth && newAzimuth < 0){
 
             newAzimuth = (360 + (newAzimuth));
             Serial.print("AzimuthModulo: ");
             Serial.println(newAzimuth); 
           }
-          
+        //verify if the value is growing up and is in the limit
+        //calcs and write the value in the servo1
         if(newAzimuth > azimuthZero && newAzimuth < (azimuthZero + 90)){
 
           deltaAzimuth = newAzimuth - azimuthZero;
           Serial.print("dZ maior: ");
           Serial.println(deltaAzimuth);
+          //verify if the value to write is bigger than the minimun value to write
           if(((deltaAzimuth - oldDeltaAzimuth) > range) || ((oldDeltaAzimuth - deltaAzimuth) > range)){
             
-            //srvMotor1.write(90 + deltaAzimuth);
+            srvMotor1.write(90 + deltaAzimuth);
             delay(100);
             oldDeltaAzimuth = deltaAzimuth;
             isHighAzimuth = true;
           }
          }
-         
+         //verify if the value is growing down and is in the limit
+        //calcs and write the value in the servo1
          if(newAzimuth < azimuthZero && newAzimuth > (azimuthZero - 90)){
 
           deltaAzimuth = azimuthZero - newAzimuth;
           Serial.print("dZ menor: ");
           Serial.println(deltaAzimuth);
+           //verify if the value to write is bigger than the minimun value to write
            if(((deltaAzimuth - oldDeltaAzimuth) > range) || ((oldDeltaAzimuth - deltaAzimuth) > range)){
 
-            //  srvMotor1.write(90 - deltaAzimuth);
+              srvMotor1.write(90 - deltaAzimuth);
               //delay(50);
               oldDeltaAzimuth = deltaAzimuth;
               isHighAzimuth = false;
